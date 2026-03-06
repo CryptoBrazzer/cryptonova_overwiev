@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRYPTO NOVΛ  (HTML)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+:root{
+  --bg0:#040818;
+  --bg1:#06122f;
+  --bg2:#020514;
+
+  --glass: rgba(255,255,255,0.06);
+  --stroke: rgba(255,255,255,0.10);
+
+  --txt: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.72);
+
+  --blue:#57a6ff;
+  --cyan:#00e7ff;
+  --gold:#f0d36d;
+
+  --shadow: 0 24px 70px rgba(0,0,0,0.55);
+
+  --pad-desktop: 16px;
+  --pad-mobile: 12px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+  background:
+    radial-gradient(1100px 650px at 18% 16%, #0c1c46 0%, transparent 56%),
+    radial-gradient(900px 600px at 82% 24%, rgba(0,231,255,0.12) 0%, transparent 56%),
+    linear-gradient(180deg, var(--bg0), var(--bg1) 45%, var(--bg2));
+  overflow-x:hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Background */
+.bg-anim{
+  position:fixed; inset:0;
+  background: linear-gradient(-45deg,
+    rgba(87,166,255,0.14),
+    rgba(0,231,255,0.10),
+    rgba(240,211,109,0.06),
+    rgba(87,166,255,0.10));
+  background-size: 420% 420%;
+  animation: bgmove 18s ease infinite;
+  mix-blend-mode: screen;
+  opacity:.55;
+  z-index:-3;
+}
+@keyframes bgmove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* Parallax blobs */
+.blob{
+  position:fixed;
+  width:720px; height:720px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(87,166,255,0.18), transparent 62%),
+    radial-gradient(circle at 70% 70%, rgba(0,231,255,0.14), transparent 62%);
+  filter: blur(10px);
+  z-index:-2;
+  opacity:.85;
+}
+.blob.b1{top:-240px; left:-260px;}
+.blob.b2{bottom:-280px; right:-240px; opacity:.68; transform:scale(1.06);}
+
+.container{
+  max-width:1120px;
+  margin:0 auto;
+  padding:22px var(--pad-desktop) 120px; /* запас под нижнее меню */
+}
+
+section{ margin-top:18px; scroll-margin-top: 90px; }
+
+.hero{ padding:42px 8px 10px; }
+
+.brandline{
+  display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap;
+}
+
+h1{
+  margin:0;
+  font-size: clamp(34px, 6vw, 46px);
+  font-weight:800;
+  letter-spacing:0.6px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.tagline{
+  margin-top:10px;
+  color:var(--muted);
+  font-size: clamp(15px, 3.6vw, 18px);
+  line-height:1.58;
+  max-width:980px;
+}
+
+.badges{
+  display:flex; gap:10px; flex-wrap:wrap;
+  margin-top:16px;
+}
+.badge{
+  border:1px solid var(--stroke);
+  background: rgba(255,255,255,0.04);
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:13px;
+  color:rgba(255,255,255,0.82);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(12, 1fr);
+  gap:16px;
+}
+
+.card{
+  border:1px solid var(--stroke);
+  background: var(--glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius:24px;
+  box-shadow: var(--shadow);
+  padding:18px 18px 16px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";
+  position:absolute; inset:-1px;
+  background:
+    radial-gradient(650px 240px at 18% 0%, rgba(87,166,255,0.18), transparent 56%),
+    radial-gradient(520px 240px at 82% 0%, rgba(0,231,255,0.14), transparent 56%);
+  opacity:.62;
+  pointer-events:none;
+}
+.card > *{position:relative}
+
+.title{
+  font-size:14px;
+  color:rgba(255,255,255,0.82);
+  font-weight:700;
+  letter-spacing:0.2px;
+  margin:0 0 10px 0;
+}
+
+h2{ margin:0 0 10px 0; font-size:24px; font-weight:800; }
+p{ margin:0 0 10px 0; color:rgba(255,255,255,0.86); line-height:1.7; }
+
+.list{
+  margin:0;
+  padding-left:18px;
+  color:rgba(255,255,255,0.86);
+  line-height:1.75;
+}
+.small{ font-size:13px; color:var(--muted); line-height:1.65; }
+
+.hr{
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.10);
+  margin:14px 0;
+}
+
+.kpiRow{ display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; }
+.kpi{
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.16);
+  border-radius:18px;
+  padding:12px 12px;
+  flex:1;
+  min-width:220px;
+}
+.kpi .k{ font-size:12px; color:rgba(255,255,255,0.72); }
+.kpi .v{ margin-top:6px; font-size:26px; font-weight:800; }
+.kpi .v.gold{
+  background: linear-gradient(90deg, var(--gold), #fff1a8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.controls{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:12px;
+  margin-top:10px;
+}
+.field{grid-column: span 6;}
+@media (max-width:900px){ .field{grid-column: span 12;} }
+
+.label{ font-size:12px; color:rgba(255,255,255,0.74); margin:0 0 6px 0; }
+.input,.select{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.20);
+  color:rgba(255,255,255,0.92);
+  outline:none;
+}
+.input:focus,.select:focus{
+  border-color: rgba(87,166,255,0.55);
+  box-shadow: 0 0 0 4px rgba(87,166,255,0.12);
+}
+
+.pills{display:flex; gap:10px; flex-wrap:wrap;}
+.pill{
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.18);
+  color:rgba(255,255,255,0.88);
+  padding:10px 12px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:13px;
+  cursor:pointer;
+  user-select:none;
+  transition: transform .15s ease, border-color .2s ease, background .2s ease;
+}
+.pill:hover{transform: translateY(-1px)}
+.pill.active{
+  border-color: rgba(0,231,255,0.55);
+  background: rgba(0,231,255,0.10);
+}
+
+.btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(87,166,255,0.14);
+  color:rgba(255,255,255,0.92);
+  font-weight:900;
+  cursor:pointer;
+  transition: transform .15s ease, background .2s ease, border-color .2s ease;
+}
+.btn:hover{transform: translateY(-1px); background: rgba(87,166,255,0.20); border-color: rgba(87,166,255,0.40);}
+
+.charts{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:16px;
+  margin-top:16px;
+}
+.chartCard{grid-column: span 6;}
+@media (max-width:980px){.chartCard{grid-column: span 12;}}
+
+.footer{
+  margin-top:24px;
+  text-align:center;
+  color:rgba(255,255,255,0.55);
+  font-size:12px;
+}
+
+/* ===== IMPORTANT FIX =====
+   Content is VISIBLE by default.
+   Animations only apply when JS adds body.js */
+.fade{ opacity:1; transform:none; }
+body.js .fade{
+  opacity:0;
+  transform: translateY(18px);
+  transition: opacity .85s ease, transform .85s ease;
+}
+body.js .fade.show{
+  opacity:1;
+  transform: translateY(0);
+}
+
+/* Mobile density */
+@media (max-width: 560px){
+  .container{ padding-left: var(--pad-mobile); padding-right: var(--pad-mobile); }
+  .hero{ padding: 28px 4px 8px; }
+  .badge{ font-size: 12px; padding: 7px 10px; }
+  .card{ border-radius: 20px; padding: 14px 14px 12px; box-shadow: 0 18px 40px rgba(0,0,0,0.45); }
+  .card::before{ opacity: .55; }
+  h2{ font-size: 20px; }
+  p{ font-size: 15px; line-height: 1.65; }
+  .kpi{ min-width: 0; }
+  .kpi .v{ font-size: 22px; }
+  .input,.select{ padding: 11px 12px; border-radius: 12px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .bg-anim{ animation: none; }
+  .blob{ display:none; }
+  body.js .fade{ transition:none; opacity:1; transform:none; }
+}
+
+/* Bottom nav (mobile) */
+.bottomNav{
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  display:flex;
+  gap:8px;
+  padding:10px;
+  border-radius:18px;
+  background: rgba(0,0,0,0.38);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.12);
+  z-index: 50;
+}
+.bottomNav button{
+  flex:1;
+  padding:10px 8px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.90);
+  font-weight: 900;
+  font-size: 12px;
+}
+@media (min-width: 900px){
+  .bottomNav{ display:none; }
+  .container{ padding-bottom: 80px; }
+}
+
+/* Deck feel + progress + controls */
+.deck{ scroll-snap-type: y mandatory; }
+.deck section{ scroll-snap-align: start; }
+
+.topProgress{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(87,166,255,0.95), rgba(0,231,255,0.95));
+  z-index: 60;
+  box-shadow: 0 10px 30px rgba(0,231,255,0.10);
+}
+
+.deckControls{
+  position: fixed;
+  right: 14px;
+  top: calc(14px + env(safe-area-inset-top));
+  display:flex;
+  gap:8px;
+  z-index: 60;
+}
+.deckControls button{
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  cursor:pointer;
+}
+@media (max-width: 900px){ .deckControls{ display:none; } }
+
+/* Print -> PDF */
+@media print{
+  .bg-anim, .blob, .bottomNav, .deckControls, .topProgress{ display:none !important; }
+  body{ background: #071634 !important; }
+  .card{ box-shadow:none !important; }
+  section{ break-inside: avoid; page-break-inside: avoid; }
+}
+</style>
+</head>
+
+<body>
+<div class="bg-anim"></div>
+<div class="blob b1" id="blob1"></div>
+<div class="blob b2" id="blob2"></div>
+
+<div class="topProgress" id="topProgress"></div>
+
+<div class="deckControls">
+  <button id="prevBtn">◀</button>
+  <button id="nextBtn">▶</button>
+  <button id="deckBtn">Deck</button>
+  <button id="pdfBtn">PDF</button>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero fade" id="top">
+    <div class="brandline">
+      <h1>CRYPTO NOVΛ</h1>
+    </div>
+    <div class="tagline">
+      <b>Премиальная экосистема “всё в одном”</b> для криптоинвестора: аналитика, торговые сигналы, <b>инсайты (VIP)</b>,
+      обучение, управление портфелем, автоторговля и индивидуальное сопровождение.
+      Цель — превратить хаотичный крипторынок в <b>понятную, логичную систему</b>, где решения принимаются уверенно и дисциплинированно.
+    </div>
+    <div class="badges">
+      <div class="badge">PRO: €29/мес</div>
+      <div class="badge">VIP: €49/мес</div>
+      <div class="badge">Insights + Autotrading (VIP)</div>
+      <div class="badge">Apple 30% / Web 3%</div>
+      <div class="badge">UAE Tax: 9% от прибыли</div>
+      <div class="badge">Старт: база 80 000+ пользователей</div>
+    </div>
+  </section>
+
+  <!-- MARKET -->
+  <section class="grid fade" id="market">
+    <div class="card" style="grid-column: span 7;">
+      <div class="title">Проблема рынка</div>
+      <h2>Люди теряют деньги из-за хаоса, а не из-за рынка</h2>
+      <p>
+        Большинство участников крипторынка тонут в инфошуме, принимают решения эмоционально и не умеют управлять рисками.
+        Итог — запоздалые входы, “пересиживание” просадок, отсутствие стратегии и повторение одних и тех же ошибок.
+      </p>
+      <ul class="list">
+        <li><b>Информационная перегрузка</b>: новости/каналы/сигналы разрознены.</li>
+        <li><b>Отсутствие системы</b>: нет понятного алгоритма действий.</li>
+        <li><b>Слабый риск-менеджмент</b>: неправильные размеры позиций, стопы, плечо.</li>
+        <li><b>Пропуск входов</b>: скорость рынка выше скорости человека.</li>
+        <li><b>Недоверие</b>: нет прозрачной статистики и логики.</li>
+      </ul>
+      <div class="hr"></div>
+      <p class="small">
+        CRYPTO NOVΛ собирает ключевые инструменты в одном месте: аналитика → сигнал → контроль риска → исполнение (включая автоторговлю).
+      </p>
+    </div>
+
+    <div class="card" style="grid-column: span 5;">
+      <div class="title">Почему сейчас</div>
+      <h2>Спрос на “структуру” растёт</h2>
+      <ul class="list">
+        <li>Переход от “казино-подхода” к дисциплине.</li>
+        <li>Рост спроса на автоматизацию (боты/алгоритмы).</li>
+        <li>Подписка — привычный формат для финтеха.</li>
+        <li>Мобильный UX важнее десятков сервисов.</li>
+      </ul>
+      <div class="hr"></div>
+      <p class="small">Побеждают продукты, которые объединяют аналитику, обучение и исполнение сделок в одной экосистеме.</p>
+    </div>
+  </section>
+
+  <!-- PRODUCT -->
+  <section class="grid fade" id="product">
+    <div class="card" style="grid-column: span 7;">
+      <div class="title">Решение</div>
+      <h2>CRYPTO NOVΛ — единая система действий</h2>
+      <p>
+        Мы объединяем <b>аналитику</b>, <b>сигналы</b>, <b>обучение</b>, <b>портфель</b>, <b>инсайты</b> и <b>автоторговлю</b>
+        так, чтобы пользователь не “искал” решения, а следовал понятному сценарию.
+      </p>
+
+      <div class="kpiRow">
+        <div class="kpi">
+          <div class="k">Ценность PRO</div>
+          <div class="v">Сигналы + аналитика</div>
+          <div class="small">Полный доступ к инструментам и обучению.</div>
+        </div>
+        <div class="kpi">
+          <div class="k">Ценность VIP</div>
+          <div class="v gold">Инсайты + автоторговля</div>
+          <div class="small">Скорость, дисциплина, контроль исполнения.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="grid-column: span 5;">
+      <div class="title">Что внутри</div>
+      <ul class="list">
+        <li><b>Analytics</b>: рынок, движения, новости, сводки.</li>
+        <li><b>Signals</b>: LONG/SHORT, entry/SL/TP, риск.</li>
+        <li><b>Insights (VIP)</b>: сценарии, макро, логика решений.</li>
+        <li><b>Autotrading (VIP)</b>: бот исполняет сигналы автоматически.</li>
+        <li><b>Portfolio</b>: PnL, аналитика, ребаланс.</li>
+        <li><b>Education</b>: от базиса до фьючерсов и рисков.</li>
+        <li><b>Investments</b>: сопровождение (без управления средствами).</li>
+      </ul>
+      <div class="hr"></div>
+      <p class="small">Приложение аналитическое/образовательное. Пользователь сохраняет полный контроль активов.</p>
+    </div>
+  </section>
+
+  <!-- SCALE -->
+  <section class="grid fade" id="scale">
+    <div class="card" style="grid-column: span 7;">
+      <div class="title">Масштабирование</div>
+      <h2>Рынки, сегменты и драйверы роста</h2>
+
+      <p>
+        Масштабируемся по двум осям: <b>география</b> (языки/рынки) и <b>сегменты</b> (FREE → PRO → VIP → B2B).
+      </p>
+
+      <div class="hr"></div>
+
+      <h3 style="margin:0 0 8px 0; font-size:16px; color:rgba(255,255,255,0.88)">География (Go-to-market)</h3>
+      <ul class="list">
+        <li><b>EU</b>: платежеспособность + привычка к подпискам.</li>
+        <li><b>MENA (ОАЭ)</b>: крипто-инфраструктура + капитал.</li>
+        <li><b>LATAM</b>: крипта как защита от инфляции.</li>
+        <li><b>Asia</b>: объёмы торгов + трейдерская культура.</li>
+      </ul>
+
+      <div class="hr"></div>
+
+      <h3 style="margin:0 0 8px 0; font-size:16px; color:rgba(255,255,255,0.88)">Сегменты (монетизация)</h3>
+      <ul class="list">
+        <li><b>Retail</b>: обучение + аналитика + сигналы.</li>
+        <li><b>Pro</b>: больше сигналов + статистика + дисциплина.</li>
+        <li><b>VIP</b>: инсайты + автоторговля + сопровождение.</li>
+        <li><b>B2B (опционально)</b>: white-label аналитика/сигналы.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="grid-column: span 5;">
+      <div class="title">Рост (ориентир)</div>
+      <h2>Визуальная траектория</h2>
+      <ul class="list">
+        <li>Web-оплаты: 3% вместо 30%</li>
+        <li>Партнёрства + referral + affiliate</li>
+        <li>Rebate от бирж как доп. слой дохода</li>
+      </ul>
+      <div class="hr"></div>
+      <canvas id="growthChart" height="220"></canvas>
+      <div class="small">Ориентир до Q1 2027 (для визуализации масштаба, не прогноз).</div>
+    </div>
+  </section>
+
+  <!-- FINANCE -->
+  <section class="grid fade" id="finance">
+    <div class="card" style="grid-column: span 12;">
+      <div class="title">Финансовая проекция (динамическая)</div>
+      <h2>PRO €29 · VIP €49 · + сопровождение и rebate</h2>
+      <p class="small">Учитывается комиссия канала, налог ОАЭ 9% от прибыли, фикс-расходы и трафик.</p>
+
+      <div class="controls">
+        <div class="field">
+          <div class="label">Сценарий</div>
+          <div class="pills" id="scenarioPills">
+            <div class="pill active" data-n="1000">1000</div>
+            <div class="pill" data-n="5000">5000</div>
+            <div class="pill" data-n="10000">10000</div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">Платные подписчики (N)</div>
+          <input class="input" id="N" type="number" min="0" step="1" value="1000">
+        </div>
+
+        <div class="field">
+          <div class="label">Доля PRO (%)</div>
+          <input class="input" id="proShare" type="number" min="0" max="100" step="1" value="70">
+        </div>
+        <div class="field">
+          <div class="label">Доля VIP (%)</div>
+          <input class="input" id="vipShare" type="number" min="0" max="100" step="1" value="30">
+        </div>
+
+        <div class="field">
+          <div class="label">Комиссия платежного канала</div>
+          <select class="select" id="storeFee">
+            <option value="0.30">Apple / App Store (30%)</option>
+            <option value="0.03">Web / Stripe (3%)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="label">Налог ОАЭ на прибыль</div>
+          <select class="select" id="uaeTax">
+            <option value="0.09">UAE Corporate Tax (9%)</option>
+            <option value="0.00">0% (режим сравнения)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="label">Фикс-расходы (€/мес)</div>
+          <input class="input" id="fixedCost" type="number" min="0" step="50" value="800">
+        </div>
+        <div class="field">
+          <div class="label">Трафик / лидогенерация (€/мес)</div>
+          <input class="input" id="trafficCost" type="number" min="0" step="100" value="0">
+        </div>
+
+        <div class="field">
+          <div class="label">Сопровождение: % клиентов</div>
+          <input class="input" id="consultShare" type="number" min="0" max="100" step="1" value="5">
+        </div>
+        <div class="field">
+          <div class="label">Сопровождение: чек (€/мес на клиента)</div>
+          <input class="input" id="consultPrice" type="number" min="0" step="10" value="200">
+        </div>
+
+        <div class="field">
+          <div class="label">Rebate: % активных трейдеров</div>
+          <input class="input" id="rebateShare" type="number" min="0" max="100" step="1" value="30">
+        </div>
+        <div class="field">
+          <div class="label">Rebate: €/мес на трейдера</div>
+          <input class="input" id="rebatePerTrader" type="number" min="0" step="1" value="10">
+        </div>
+      </div>
+
+      <div class="kpiRow">
+        <div class="kpi">
+          <div class="k">Выручка / мес</div>
+          <div class="v" id="revTotal">€0</div>
+          <div class="small" id="revBreakdown">—</div>
+        </div>
+        <div class="kpi">
+          <div class="k">Чистая прибыль / мес</div>
+          <div class="v gold" id="netMonthly">€0</div>
+          <div class="small" id="profitLine">—</div>
+        </div>
+        <div class="kpi">
+          <div class="k">Чистая прибыль / год</div>
+          <div class="v" id="netYear">€0</div>
+          <div class="small" id="arrLine">—</div>
+        </div>
+      </div>
+
+      <div class="btnRow">
+        <button class="btn" id="fullscreenBtn">Pitch mode (fullscreen)</button>
+        <button class="btn" id="resetBtn">Сброс</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHARTS -->
+  <section class="charts fade">
+    <div class="card chartCard">
+      <div class="title">Чистая прибыль по сценариям</div>
+      <canvas id="scenarioChart" height="220"></canvas>
+      <div class="small">1000 / 5000 / 10000 — по текущим параметрам.</div>
+    </div>
+
+    <div class="card chartCard">
+      <div class="title">Структура доходов</div>
+      <canvas id="mixChart" height="220"></canvas>
+      <div class="small">Подписки (после комиссии) + сопровождение + rebate.</div>
+    </div>
+
+    <div class="card" style="grid-column: span 12;">
+      <div class="title">Adoption curve (визуально)</div>
+      <canvas id="sCurve" height="160"></canvas>
+      <div class="small">Иллюстрация траектории масштабирования (не прогноз).</div>
+    </div>
+  </section>
+
+  <!-- LEGAL -->
+  <section class="grid fade">
+    <div class="card" style="grid-column: span 12;">
+      <div class="title">Юридическая информация</div>
+      <p class="small">
+        CRYPTO NOVΛ — аналитическое и образовательное приложение. Не является финансовым консультантом и не предоставляет индивидуальных инвестиционных рекомендаций.
+        Криптоактивы — высокорисковый класс. Пользователь самостоятельно принимает решения и несёт ответственность за результат.
+        CRYPTO NOVΛ не принимает и не управляет средствами клиентов.
+      </p>
+    </div>
+  </section>
+
+  <div class="footer">CRYPTO NOVΛ · 2026</div>
+</div>
+
+<nav class="bottomNav">
+  <button data-go="top">Главная</button>
+  <button data-go="market">Рынок</button>
+  <button data-go="product">Продукт</button>
+  <button data-go="scale">Масштаб</button>
+  <button data-go="finance">Финансы</button>
+</nav>
+
+<script>
+/* Mark JS ready -> enables animations safely */
+document.body.classList.add('js');
+
+/* Parallax */
+const b1 = document.getElementById('blob1');
+const b2 = document.getElementById('blob2');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY || 0;
+  if(b1) b1.style.transform = `translate3d(${y * 0.02}px, ${y * 0.03}px, 0)`;
+  if(b2) b2.style.transform = `translate3d(${y * -0.015}px, ${y * -0.02}px, 0)`;
+},{passive:true});
+
+/* Fade-in (only if supported) */
+try{
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show'); });
+  },{threshold:0.12});
+  document.querySelectorAll('.fade').forEach(el=>io.observe(el));
+}catch(_){
+  // If IntersectionObserver fails -> content still visible due to CSS fix.
+}
+
+/* Bottom nav scroll */
+document.querySelectorAll('.bottomNav button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const id = btn.dataset.go;
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+/* Progress bar */
+function updateProgress(){
+  const doc = document.documentElement;
+  const max = (doc.scrollHeight - doc.clientHeight) || 1;
+  const pct = (doc.scrollTop / max) * 100;
+  const bar = document.getElementById('topProgress');
+  if(bar) bar.style.width = pct.toFixed(2) + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+updateProgress();
+
+/* Deck navigation */
+const sections = Array.from(document.querySelectorAll('.container section'));
+function currentSectionIndex(){
+  const y = window.scrollY + 120;
+  let idx = 0;
+  for(let i=0;i<sections.length;i++){
+    const top = sections[i].getBoundingClientRect().top + window.scrollY;
+    if(top <= y) idx = i;
+  }
+  return idx;
+}
+function goToSection(i){
+  const idx = Math.max(0, Math.min(sections.length - 1, i));
+  sections[idx]?.scrollIntoView({behavior:'smooth', block:'start'});
+}
+document.getElementById('nextBtn')?.addEventListener('click', ()=>goToSection(currentSectionIndex()+1));
+document.getElementById('prevBtn')?.addEventListener('click', ()=>goToSection(currentSectionIndex()-1));
+document.getElementById('deckBtn')?.addEventListener('click', ()=>document.body.classList.toggle('deck'));
+document.getElementById('pdfBtn')?.addEventListener('click', ()=>window.print());
+window.addEventListener('keydown', (e)=>{
+  if(e.key === 'ArrowRight' || e.key === 'ArrowDown') goToSection(currentSectionIndex()+1);
+  if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') goToSection(currentSectionIndex()-1);
+});
+
+/* Helpers */
+const € = (n) => {
+  if (!isFinite(n)) n = 0;
+  const sign = n < 0 ? "-" : "";
+  const v = Math.abs(n);
+  const s = v.toLocaleString("ru-RU", {maximumFractionDigits:0});
+  return `${sign}€${s}`;
+};
+function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+/* Model */
+function getParams(){
+  const N = Math.max(0, Number(document.getElementById('N')?.value || 0));
+  let proShare = Number(document.getElementById('proShare')?.value || 0) / 100;
+  let vipShare = Number(document.getElementById('vipShare')?.value || 0) / 100;
+
+  const sum = proShare + vipShare;
+  if (sum <= 0){ proShare = 0.7; vipShare = 0.3; }
+  else { proShare /= sum; vipShare /= sum; }
+
+  const storeFee = clamp01(Number(document.getElementById('storeFee')?.value || 0.30));
+  const tax = clamp01(Number(document.getElementById('uaeTax')?.value || 0.09));
+  const fixed = Math.max(0, Number(document.getElementById('fixedCost')?.value || 0));
+  const traffic = Math.max(0, Number(document.getElementById('trafficCost')?.value || 0));
+
+  const consultShare = clamp01(Number(document.getElementById('consultShare')?.value || 0)/100);
+  const consultPrice = Math.max(0, Number(document.getElementById('consultPrice')?.value || 0));
+
+  const rebateShare = clamp01(Number(document.getElementById('rebateShare')?.value || 0)/100);
+  const rebatePerTrader = Math.max(0, Number(document.getElementById('rebatePerTrader')?.value || 0));
+
+  return {
+    N,
+    proShare, vipShare,
+    proPrice: 29,
+    vipPrice: 49,
+    storeFee,
+    tax,
+    fixed,
+    traffic,
+    consultShare,
+    consultPrice,
+    rebateShare,
+    rebatePerTrader
+  };
+}
+
+function computeModel(p){
+  const netFactor = 1 - p.storeFee;
+  const subsGross = p.N * (p.proShare * p.proPrice + p.vipShare * p.vipPrice);
+  const subsNet = subsGross * netFactor;
+
+  const consultRev = (p.N * p.consultShare) * p.consultPrice;
+  const rebateRev  = (p.N * p.rebateShare)  * p.rebatePerTrader;
+
+  const revenueTotal = subsNet + consultRev + rebateRev;
+  const profitBeforeTax = revenueTotal - p.fixed - p.traffic;
+  const taxAmount = profitBeforeTax > 0 ? profitBeforeTax * p.tax : 0;
+  const netProfit = profitBeforeTax - taxAmount;
+
+  return { subsNet, consultRev, rebateRev, revenueTotal, profitBeforeTax, taxAmount, netProfit };
+}
+
+/* Charts */
+let scenarioChart, mixChart, sCurveChart;
+
+function buildCharts(){
+  if(typeof Chart === 'undefined') return;
+
+  const ctx1 = document.getElementById('scenarioChart');
+  const ctx2 = document.getElementById('mixChart');
+  const ctx3 = document.getElementById('sCurve');
+
+  scenarioChart = new Chart(ctx1, {
+    type:'line',
+    data:{ labels:['1000','5000','10000'], datasets:[{
+      data:[0,0,0], borderWidth:3, tension:0.35, pointRadius:4, fill:true,
+      backgroundColor:'rgba(87,166,255,0.10)', borderColor:'rgba(87,166,255,0.95)'
+    }]},
+    options:{ plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:{color:'rgba(255,255,255,0.75)'} },
+              y:{ ticks:{color:'rgba(255,255,255,0.75)'} } }
+    }
+  });
+
+  mixChart = new Chart(ctx2, {
+    type:'doughnut',
+    data:{
+      labels:['Подписки (после комиссии)','Сопровождение','Rebate бирж'],
+      datasets:[{
+        data:[1,1,1], borderWidth:1, borderColor:'rgba(255,255,255,0.12)',
+        backgroundColor:['rgba(87,166,255,0.85)','rgba(0,231,255,0.65)','rgba(240,211,109,0.75)']
+      }]
+    },
+    options:{ plugins:{ legend:{ labels:{ color:'rgba(255,255,255,0.78)' } } } }
+  });
+
+  const xs = Array.from({length:41}, (_,i)=> i/40);
+  const s = xs.map(t=>{
+    const k=10, x0=0.55;
+    return 1/(1+Math.exp(-k*(t-x0)));
+  });
+
+  sCurveChart = new Chart(ctx3, {
+    type:'line',
+    data:{ labels: xs.map(v=>Math.round(v*100)), datasets:[{
+      data:s, borderWidth:3, tension:0.35, pointRadius:0, fill:true,
+      backgroundColor:'rgba(0,231,255,0.08)', borderColor:'rgba(0,231,255,0.85)'
+    }]},
+    options:{ plugins:{ legend:{display:false} },
+      scales:{
+        x:{ ticks:{color:'rgba(255,255,255,0.65)', callback:(v)=> (v%20===0? v+"%":"") } },
+        y:{ ticks:{display:false} }
+      }
+    }
+  });
+}
+
+function updateCharts(){
+  const p = getParams();
+  const Ns = [1000, 5000, 10000].map(n => ({...p, N:n}));
+  const nets = Ns.map(pp => computeModel(pp).netProfit);
+
+  if(scenarioChart){
+    scenarioChart.data.datasets[0].data = nets.map(v => Math.max(-100000, v));
+    scenarioChart.update();
+  }
+
+  const m = computeModel(p);
+  if(mixChart){
+    mixChart.data.datasets[0].data = [Math.max(0,m.subsNet), Math.max(0,m.consultRev), Math.max(0,m.rebateRev)];
+    mixChart.update();
+  }
+}
+
+function refresh(){
+  const p = getParams();
+  const m = computeModel(p);
+
+  const revTotal = document.getElementById('revTotal');
+  const revBreakdown = document.getElementById('revBreakdown');
+  const netMonthly = document.getElementById('netMonthly');
+  const profitLine = document.getElementById('profitLine');
+  const netYear = document.getElementById('netYear');
+  const arrLine = document.getElementById('arrLine');
+
+  if(revTotal) revTotal.textContent = €(m.revenueTotal);
+  if(revBreakdown) revBreakdown.innerHTML =
+    `Подписки: <b>${€(m.subsNet)}</b> · Сопровождение: <b>${€(m.consultRev)}</b> · Rebate: <b>${€(m.rebateRev)}</b>`;
+
+  if(netMonthly) netMonthly.textContent = €(m.netProfit);
+  if(profitLine) profitLine.innerHTML =
+    `До налога: <b>${€(m.profitBeforeTax)}</b> · Налог: <b>${€(m.taxAmount)}</b> · Расходы: <b>${€(p.fixed + p.traffic)}</b>`;
+
+  if(netYear) netYear.textContent = €(m.netProfit * 12);
+
+  const subsARR = (m.subsNet * 12);
+  const arpuNet = (p.N > 0) ? (m.subsNet / p.N) : 0;
+  if(arrLine) arrLine.innerHTML =
+    `ARR (подписки): <b>${€(subsARR)}</b> · Net ARPU: <b>${€(arpuNet)}</b>/мес`;
+
+  updateCharts();
+}
+
+/* Scenario pills */
+document.getElementById('scenarioPills')?.addEventListener('click', (e)=>{
+  const pill = e.target.closest('.pill');
+  if(!pill) return;
+  document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+  pill.classList.add('active');
+  const N = document.getElementById('N');
+  if(N) N.value = pill.dataset.n;
+  refresh();
+});
+
+/* Inputs */
+[
+  'N','proShare','vipShare','storeFee','uaeTax','fixedCost','trafficCost',
+  'consultShare','consultPrice','rebateShare','rebatePerTrader'
+].forEach(id=>{
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('input', ()=>{
+    if(id==='proShare'){
+      const pro = Number(document.getElementById('proShare').value||0);
+      document.getElementById('vipShare').value = Math.max(0, 100 - pro);
+    }
+    if(id==='vipShare'){
+      const vip = Number(document.getElementById('vipShare').value||0);
+      document.getElementById('proShare').value = Math.max(0, 100 - vip);
+    }
+    refresh();
+  });
+});
+
+/* Fullscreen + reset */
+document.getElementById('fullscreenBtn')?.addEventListener('click', async ()=>{
+  try{
+    if(!document.fullscreenElement) await document.documentElement.requestFullscreen();
+    else await document.exitFullscreen();
+  }catch(_){}
+});
+document.getElementById('resetBtn')?.addEventListener('click', ()=>{
+  document.getElementById('N').value = 1000;
+  document.getElementById('proShare').value = 70;
+  document.getElementById('vipShare').value = 30;
+  document.getElementById('storeFee').value = 0.30;
+  document.getElementById('uaeTax').value = 0.09;
+  document.getElementById('fixedCost').value = 800;
+  document.getElementById('trafficCost').value = 0;
+  document.getElementById('consultShare').value = 5;
+  document.getElementById('consultPrice').value = 200;
+  document.getElementById('rebateShare').value = 30;
+  document.getElementById('rebatePerTrader').value = 10;
+
+  document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+  document.querySelector('.pill[data-n="1000"]')?.classList.add('active');
+  refresh();
+});
+
+/* Growth chart */
+function buildGrowthChart(){
+  const el = document.getElementById('growthChart');
+  if(!el || typeof Chart === 'undefined') return;
+
+  new Chart(el, {
+    type: 'line',
+    data: {
+      labels: ['Q2 2026','Q3 2026','Q4 2026','Q1 2027'],
+      datasets: [{
+        data: [1200, 3500, 10000, 18000],
+        borderWidth: 3,
+        tension: 0.35,
+        pointRadius: 4,
+        fill: true,
+        backgroundColor: 'rgba(240,211,109,0.08)',
+        borderColor: 'rgba(240,211,109,0.95)'
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color:'rgba(255,255,255,0.75)' } },
+        y: { ticks: { color:'rgba(255,255,255,0.75)' } }
+      }
+    }
+  });
+}
+
+/* Init */
+buildCharts();
+buildGrowthChart();
+refresh();
+</script>
+</body>
+</html>
